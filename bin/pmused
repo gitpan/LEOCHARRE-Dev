@@ -1,0 +1,113 @@
+#!/usr/bin/perl -w
+use lib './lib';
+use strict;
+use base 'LEOCHARRE::CLI';
+use LEOCHARRE::PMUsed ':all';
+our $VERSION = sprintf "%d.%02d", q$Revision: 1.3 $ =~ /(\d+)/g;
+
+my $o = gopts('xql');
+my $files = argv_aspaths() or warn('missing argument list') and exit;
+
+
+for (@$files){
+   showone($_);
+}
+
+exit;
+
+
+
+
+
+sub showone {
+   my $abs = shift;
+
+   my $modules = {};
+
+   print "# $abs:\n" unless $o->{q};
+
+   if (-d $abs){
+      debug("is dir\n");
+      $modules = modules_used_scan_tree($abs);
+   }
+   else {
+      debug("is file\n");   
+      $modules = modules_used($abs);      
+   }
+
+
+   showresults($modules);
+
+
+   return;
+   
+}
+
+
+sub showresults {
+   my $modulehash = shift;
+   
+
+    MODULE : for (keys %$modulehash){      
+      my $module_name = $_;
+            
+      if ($o->{x} and module_is_installed($module_name)){
+         next MODULE;     
+      }
+      
+      print "$module_name".( $o->{l} ? "\n" : ' ' );
+      
+    }
+
+    print "\n" unless $o->{q};
+    
+    return;
+}
+
+
+
+=pod
+
+=head1 NAME
+
+pmused - ask questions about perl modules used in a code file or hierarchy
+
+=head1 DESCRIPTION
+
+With this you can quickly find out if a package or other mountain of perl code
+needs modules that are not installed in your system.
+Also you can have a pretty format for using with cpan install.
+
+=head1 OPTION FLAGS
+
+	-d debug on
+	-v print version and exit
+	-h help
+	-x only show modules not installed
+   -q quiet
+   -l one per line
+
+=head1 USAGE
+
+To see what modules are used in a code file
+
+	pmused ./path/to/file.pl
+
+To see recursively for all perl files in a dir tree
+
+	pmused ./path/to/dev/dir
+
+To only print to screen any modules used but not installed
+
+	pmused -x ./path/to/dev/dir
+	pmused -x ./path/to/file.pl
+
+=head1 AUTHOR
+
+Leo Charre leocharre at cpan dot org
+
+=head1 SEE ALSO
+
+LEOCHARRE::CLI
+
+=cut

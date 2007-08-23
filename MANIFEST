@@ -1,0 +1,19 @@
+lib/LEOCHARRE/Dev.pm
+lib/LEOCHARRE/PMUsed.pm
+lib/LEOCHARRE/PMSubs.pm
+MANIFEST
+Makefile.PL
+t/1_pmused.t
+t/3_PMSubs.t
+t/code1.pm
+t/code2.pm
+t/mockdev/bin/yesperl
+t/mockdev/bin/notperl
+t/mockdev/lib/Mock.pm
+bin/pmused
+bin/pmsubs
+bin/pmver
+bin/unbleach
+bin/pmtestcheck
+bin/pmtestmake
+META.yml                                 Module meta-data (added by MakeMaker)

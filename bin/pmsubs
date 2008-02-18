@@ -3,13 +3,16 @@ use strict;
 use lib './lib';
 use base 'LEOCHARRE::CLI';
 use LEOCHARRE::PMSubs 'subs_defined';
-our $VERSION = sprintf "%d.%02d", q$Revision: 1.1 $ =~ /(\d+)/g;
+our $VERSION = sprintf "%d.%02d", q$Revision: 1.2 $ =~ /(\d+)/g;
 
-my $o = gopts('p');
+my $o = gopts('pP');
 $o->{p} ||=0;
 
 my $files = argv_aspaths() or warn('missing argument list') and exit;
 
+if ($o->{P}){
+   die('-P not implemented');
+}
 
 for (@$files){
    showone($_);
@@ -22,11 +25,12 @@ sub showone {
    my $abs = shift;
    
    if (scalar @$files > 1){
-      print "[$abs]\n";
+      print "# [$abs]\n";
    }
 
    my $subs = subs_defined($abs,$o->{p});
-      
+   
+   
    map { print "$_\n" } @$subs;
 
    print "\n";
@@ -51,6 +55,7 @@ prints to screen all subs defined in a perl code file
    -d debug on
    -v print version and exit
    -h help
+   -P generate pod documentation for each sub
    
 =head1 EXAMPLE USAGE
 
@@ -66,6 +71,6 @@ Leo Charre leocharre at cpan dot org
 
 =head1 SEE ALSO
 
-Part of package L<LEOCHARRE::Dev>.
+LEOCHARRE::Dev
 
 =cut

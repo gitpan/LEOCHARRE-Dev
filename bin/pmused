@@ -1,34 +1,85 @@
-#!/usr/bin/perl -w
+#!/usr/bin/perl
 use lib './lib';
 use strict;
 use base 'LEOCHARRE::CLI';
 use LEOCHARRE::PMUsed ':all';
-our $VERSION = sprintf "%d.%02d", q$Revision: 1.3 $ =~ /(\d+)/g;
+our $VERSION = sprintf "%d.%02d", q$Revision: 1.8 $ =~ /(\d+)/g;
+#use Smart::Comments '###';
+my $o = gopts('xqlsMAC');
 
-my $o = gopts('xql');
+if($o->{C}){
+   my $files = argv_aspaths();
+   
+   # use cpan for each missing module
+
+   my @all;
+
+   for my $path ( @$files ){
+      debug("path :: $path.. ");
+     my $m = _fileordir_modules($path); 
+     my @m = keys %$m;
+         
+     push @all, @m;
+   }
+   
+   ### @all
+   
+   MD: for my $module_name( @all){
+      if(  module_is_installed($module_name) ){
+         debug("$module_name already installed.\n");
+         next MD;
+      }
+
+      debug("$module_name missing.. calling cpan..\n");
+      system('cpan','-i', $module_name) ==0 or print STDERR"\n\n -- could not cpan $module_name ?\n\n";
+
+   
+   }
+
+   exit;
+
+}
+
+
+
+
+unless($o->{s}){ $o->{l} = 1; }
+
+my $code = $o->{M}; # as makefile code
+my $date = `date`;
+chomp $date;
+my $CODE = sprintf "   # gen %s by %s \n",$0,$date;
+
 my $files = argv_aspaths() or warn('missing argument list') and exit;
+
+
+if ($code){
+      $CODE.= "   PREREQ_PM => {\n";
+}
 
 
 for (@$files){
    showone($_);
+}
+if ($code){
+      $CODE.= "   },\n";
+      print $CODE;
 }
 
 exit;
 
 
 
-
-
-sub showone {
+sub _fileordir_modules {
    my $abs = shift;
 
    my $modules = {};
 
-   print "# $abs:\n" unless $o->{q};
+   print STDERR "# _fileordir_modules() $abs:\n" unless $o->{q};
 
    if (-d $abs){
       debug("is dir\n");
-      $modules = modules_used_scan_tree($abs);
+      $modules = modules_used_scan_tree($abs,1); # 1 is for skip ones in this package
    }
    else {
       debug("is file\n");   
@@ -36,26 +87,53 @@ sub showone {
    }
 
 
-   showresults($modules);
+   return $modules;
+}
 
+
+
+sub showone {
+   my ($abs,$modules) = (shift,{});
+   
+   print STDERR "# $abs:\n" unless $o->{q};
+
+   my $modules = _fileordir_modules($abs);
+   
+   showresults($modules);
 
    return;
    
 }
 
 
+
+
 sub showresults {
    my $modulehash = shift;
    
 
+
     MODULE : for (keys %$modulehash){      
       my $module_name = $_;
+      
+      next MODULE if _skip($module_name) and !$o->{A};
             
       if ($o->{x} and module_is_installed($module_name)){
          next MODULE;     
       }
       
-      print "$module_name".( $o->{l} ? "\n" : ' ' );
+      if(!$code){
+         print "$module_name".( $o->{l} ? "\n" : ' ' );
+      }
+      else {
+         
+      
+         my $version = `pmver $module_name 2>/dev/null`;
+         $version ||= 0;
+         $version < 100 or $version = 0;
+      
+         $CODE.="      '$module_name' => '$version'\n";
+      }
       
     }
 
@@ -64,7 +142,16 @@ sub showresults {
     return;
 }
 
+sub _skip {
+   my $name = shift;
 
+   for my $skip ( qw(strict Carp warnings) ){
+         $name eq $skip or next;
+         return 1;
+   }
+   return 0;
+
+}
 
 =pod
 
@@ -85,8 +172,15 @@ Also you can have a pretty format for using with cpan install.
 	-h help
 	-x only show modules not installed
    -q quiet
-   -l one per line
+   
+   -l one per line, default
+   -s single line
+   
+   -M print as code for Makefile.PL
+   -A show *all* modules used, including strict, vars, etc.
 
+   -C run cpan for each missing module, does it once per module missing (-x)
+   
 =head1 USAGE
 
 To see what modules are used in a code file
@@ -108,6 +202,6 @@ Leo Charre leocharre at cpan dot org
 
 =head1 SEE ALSO
 
-LEOCHARRE::CLI
+LEOCHARRE::Dev
 
 =cut

@@ -1,8 +1,6 @@
 package LEOCHARRE::Dev;
 
-our $VERSION = sprintf "%d.%02d", q$Revision: 1.3 $ =~ /(\d+)/g;
-
-
+our $VERSION = sprintf "%d.%02d", q$Revision: 1.4 $ =~ /(\d+)/g;
 
 
 sub _show_symbol_table {

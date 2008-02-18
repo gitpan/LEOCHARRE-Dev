@@ -169,9 +169,11 @@ If your module resides in /myself/dev/Awesome-Project
 
 =head1 SEE ALSO
 
-L<LEOCHARRE::CLI>
+LEOCHARRE::Dev
 
 =head1 AUTHOR
+
+Leo Charre leocharre at cpan dot org
 
 =cut
 

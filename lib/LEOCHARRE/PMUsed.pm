@@ -1,5 +1,6 @@
 package LEOCHARRE::PMUsed;
 use Cwd;
+use Carp;
 require Exporter;
 use vars qw(@ISA $VERSION @EXPORT_OK %EXPORT_TAGS);
 use strict;
@@ -7,7 +8,7 @@ use strict;
 @EXPORT_OK =qw(module_is_installed find_code_files modules_used modules_used_scan_tree);
 %EXPORT_TAGS = ( all => \@EXPORT_OK );
 
-$VERSION = sprintf "%d.%02d", q$Revision: 1.3 $ =~ /(\d+)/g;
+$VERSION = sprintf "%d.%02d", q$Revision: 1.6 $ =~ /(\d+)/g;
 
 $LEOCHARRE::PMUsed::DEBUG = 0;
 sub DEBUG : lvalue {$LEOCHARRE::PMUsed::DEBUG}
@@ -20,7 +21,7 @@ sub module_is_installed {
    if ( do { eval "require $module;" } ){
       return 1;
    }   
-   warn("Missing perl module: $module");
+   debug("Missing perl module: $module");
    return 0;
 }
 
@@ -35,6 +36,7 @@ sub find_code_files {
 
    
    my @files = $r->in($abs);
+
 
   
    #also find in bin, if usr/bin/perl type line is present in first 3 lines
@@ -78,7 +80,7 @@ sub find_code_files {
 
 sub modules_used {
    my $abs_code = shift;
-   (-f $abs_code) or warn("File [$abs_code] is not a file.") and return;
+   (-f $abs_code) or carp("argument to modules_userd() [$abs_code] is not a file.") and return;
    
    my $lines = [];
    my $modules = {};
@@ -114,8 +116,10 @@ sub modules_used {
       if ( $line=~/require\s+([\w\:]+)\s*;/s ){
          my $module = $1;
          
-         $module=~/\.pl$|\.pm$/ or next LINES;
-         $module!~/\./ or next LINES;
+         if( $module=~/\.pl$|\.pm$/ or $module=~/^\./ ){
+            # then skip, it's a include
+            next LINES;
+         }
          $modules->{$module}++;
       }   
       
@@ -130,18 +134,37 @@ sub modules_used {
 
 sub modules_used_scan_tree {
    my $abs_dir = shift;
+   my $skip_inclusive = shift;
+   $skip_inclusive ||= 0;
 
    my $codefiles = find_code_files($abs_dir) or warn("no code files found?") and return;
-  
+ 
+   # record which they are, so if they are used by others in this palce, we skip,
+   # that is, if we have lib/this and lib/that, we cont want to say we need either
+   my $skip = {};
+   
+   for (@$codefiles){   # if we do 'for my $this (@$codefiles) it screws up
+      my $path = $_;
+      $path=~s/\.pm$// or next;
+      $path=~s/^.+lib\///;
+      $path=~s/\//\:\:/g;
+      debug(" - summed to $path\n");
+      $skip->{$path}++;
+   }
    
    my $all={};
    
    for(@$codefiles){
-      my $modules = modules_used($_);
+      my $modules = modules_used($_) or die;
 
-      for(keys %$modules){
+      MUSED: for my $name (keys %$modules){
          
-         my $name = $_;
+         #if we have in the tree, skip
+         if( $skip_inclusive and exists $skip->{$name}){
+            debug("$name is part of distro");
+            next MUSED;
+         }
+         
          my $count = $modules->{$name};
 
          if(defined $all->{$name}){
@@ -163,6 +186,11 @@ sub modules_used_scan_tree {
 
 
 1;
+
+
+__END__
+
+=pod
 
 =head1 NAME
 
@@ -209,3 +237,8 @@ returns hash ref, each key is a module name, the value is the count of times see
 =head1 AUTHOR
 
 Leo Charre leocharre at cpan dot org
+
+=head1 SEE ALSO
+
+LEOCHARRE::Dev
+

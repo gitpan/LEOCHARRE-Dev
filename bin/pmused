@@ -3,7 +3,7 @@ use lib './lib';
 use strict;
 use base 'LEOCHARRE::CLI';
 use LEOCHARRE::PMUsed ':all';
-our $VERSION = sprintf "%d.%02d", q$Revision: 1.8 $ =~ /(\d+)/g;
+our $VERSION = sprintf "%d.%02d", q$Revision: 1.9 $ =~ /(\d+)/g;
 #use Smart::Comments '###';
 my $o = gopts('xqlsMAC');
 
@@ -56,7 +56,6 @@ my $files = argv_aspaths() or warn('missing argument list') and exit;
 if ($code){
       $CODE.= "   PREREQ_PM => {\n";
 }
-
 
 for (@$files){
    showone($_);
@@ -112,11 +111,11 @@ sub showresults {
    my $modulehash = shift;
    
 
+    MODULE : for my $module_name (sort keys %$modulehash){      
 
-    MODULE : for (keys %$modulehash){      
-      my $module_name = $_;
-      
-      next MODULE if _skip($module_name) and !$o->{A};
+      if( !$o->{A} and _skip_module($module_name) ){ # leave out base, lib, etc
+         next MODULE;
+      }
             
       if ($o->{x} and module_is_installed($module_name)){
          next MODULE;     
@@ -132,7 +131,8 @@ sub showresults {
          $version ||= 0;
          $version < 100 or $version = 0;
       
-         $CODE.="      '$module_name' => '$version'\n";
+         $CODE.= sprintf "      %-50s => %s,\n", "'$module_name'", "'$version'";
+
       }
       
     }
@@ -142,15 +142,10 @@ sub showresults {
     return;
 }
 
-sub _skip {
+sub _skip_module {
    my $name = shift;
-
-   for my $skip ( qw(strict Carp warnings) ){
-         $name eq $skip or next;
-         return 1;
-   }
-   return 0;
-
+   
+   return ( $name=~/^[A-Z]\w+/ ? 0 : 1 ); 
 }
 
 =pod

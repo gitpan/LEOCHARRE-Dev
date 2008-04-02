@@ -5,6 +5,7 @@ lib/LEOCHARRE/Test.pm
 lib/LEOCHARRE/PMInspect.pm
 MANIFEST
 Makefile.PL
+t/Bogus.pm
 t/1_pmused.t
 t/3_PMSubs.t
 t/code1.pm
@@ -19,5 +20,6 @@ bin/pmver
 bin/unbleach
 bin/pmtestcheck
 bin/pmtestmake
+bin/pmassertexe
 bin/pinstall
 META.yml                                 Module meta-data (added by MakeMaker)

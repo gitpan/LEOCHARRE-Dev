@@ -7,7 +7,8 @@ use warnings;
 @ISA = qw(Exporter);
 @EXPORT_OK =qw(subs_defined _subs_defined _subs_used subs_used);
 %EXPORT_TAGS = ( all => \@EXPORT_OK );
-$VERSION = sprintf "%d.%02d", q$Revision: 1.1 $ =~ /(\d+)/g;
+$VERSION = sprintf "%d.%02d", q$Revision: 1.2 $ =~ /(\d+)/g;
+use LEOCHARRE::DEBUG;
 
 sub subs_defined {
    my ($abs_file,$public_only) = @_;
@@ -28,19 +29,51 @@ sub _subs_defined {
    $code=~/\w/ or carp('nothing in code arg') and return [];   
    $public_only ||=0;
  
-   my $sub={};
 
-   while($code=~/sub\s+([a-zA-Z_]+[\w\: ]*)\s*\{/sg){
-      my $_sub = $1;
-      $_sub=~s/\s//g;
-      next if $public_only and $_sub=~/^_/;
-      $sub->{$_sub}++;  
-   }   
+
+   my @_subs;
+   my @subs;
+   my @lines = split( /\n/, $code);
    
-   my @subs = sort keys %$sub;   
+   
+   LINE: for my $line (@lines){
+      my $_sub = _line_defines_sub($line) or next LINE;
+      push @_subs, $_sub;      
+   }  
+
+
+   if($public_only){
+      @subs = sort grep { !/^_/ } @_subs;
+   }
+   
+   else {
+      @subs = sort @_subs;
+   }
+      
    return \@subs;
 }
 
+sub _line_defines_sub {
+   my $line = shift;
+
+   debug(" # == # line = <<<$line>>>\n");
+   
+   my $start = qr/^sub\s+|^\*|^\&/o;
+   my $symbol_name = qr/[_a-zA-Z\:][_a-zA-Z\:0-9]*/o;
+   my $att = qr/\s+\:\s*[a-zA-Z][\w]*/o;
+   
+   my $end = qr/\s*{|\s*\=\s*sub\s*\{/o;
+   
+   
+   if( $line=~/$start($symbol_name)$att?$end/sg ){
+      my $subname = $1;
+      chomp $subname;
+      debug(" # -- # subname : <<<$subname>>>\n");   
+      return $subname;
+   }
+   
+   return;
+}
 
 
 sub _slurp {

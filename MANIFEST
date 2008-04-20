@@ -22,4 +22,5 @@ bin/pmtestcheck
 bin/pmtestmake
 bin/pmassertexe
 bin/pinstall
+bin/pmpodoutline
 META.yml                                 Module meta-data (added by MakeMaker)

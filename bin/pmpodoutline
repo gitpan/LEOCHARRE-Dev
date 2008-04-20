@@ -1,0 +1,3 @@
+#!/bin/sh
+
+cat $1 | grep '=head' | sed 's/=head1 /\n/' | sed 's/=head2 /  /' | sed 's/=head3 /    /' | sed 's/=head4 / 

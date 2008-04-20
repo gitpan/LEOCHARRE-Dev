@@ -3,8 +3,7 @@ use lib './lib';
 use strict;
 use base 'LEOCHARRE::CLI';
 use LEOCHARRE::PMUsed ':all';
-our $VERSION = sprintf "%d.%02d", q$Revision: 1.9 $ =~ /(\d+)/g;
-#use Smart::Comments '###';
+our $VERSION = sprintf "%d.%02d", q$Revision: 1.10 $ =~ /(\d+)/g;
 my $o = gopts('xqlsMAC');
 
 if($o->{C}){
@@ -74,7 +73,7 @@ sub _fileordir_modules {
 
    my $modules = {};
 
-   print STDERR "# _fileordir_modules() $abs:\n" unless $o->{q};
+   debug("$abs");
 
    if (-d $abs){
       debug("is dir\n");
@@ -94,7 +93,7 @@ sub _fileordir_modules {
 sub showone {
    my ($abs,$modules) = (shift,{});
    
-   print STDERR "# $abs:\n" unless $o->{q};
+   debug( "$abs");
 
    my $modules = _fileordir_modules($abs);
    
@@ -131,7 +130,7 @@ sub showresults {
          $version ||= 0;
          $version < 100 or $version = 0;
       
-         $CODE.= sprintf "      %-50s => %s,\n", "'$module_name'", "'$version'";
+         $CODE.= sprintf "      %-35s => %s,\n", "'$module_name'", "'$version'";
 
       }
       

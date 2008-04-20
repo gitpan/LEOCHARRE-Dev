@@ -28,5 +28,8 @@ bin/pinstall
 bin/pmhelp
 bin/pmusing
 bin/devdebug-httpd
+bin/pmpodoutline
+bin/pmmanifest
+bin/pmmakefile
 )],
 );

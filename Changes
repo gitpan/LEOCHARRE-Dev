@@ -1,0 +1,69 @@
+2008-06-26 07:17  cvs
+
+	* bin/pmchanges: making sure to prune empty changes, only show
+	  those with comments
+
+2008-06-25 09:54  cvs
+
+	* MANIFEST, Makefile.PL: added wrapper around cvs2cl
+
+2008-06-25 09:37  cvs
+
+	* Makefile.PL, bin/cvs2cl, bin/pmmakefile, bin/pmused, bin/pmver:
+	  added feature to pmmakefile so that you can prune version numbers
+
+2008-06-25 09:27  cvs
+
+	* MANIFEST, Makefile.PL, bin/pmhelp, bin/pmmakefile,
+	  bin/pmpodoutline, bin/unbleach: adding automatic changelog script
+
+2008-06-25 09:25  cvs
+
+	* bin/pmver: added options and polished help
+
+2008-06-16 08:52  cvs
+
+	* MANIFEST, Makefile.PL: cleaned up some stuff in distro;
+
+2008-06-08 19:31  cvs
+
+	* MANIFEST, Makefile.PL, bin/pmdistest: added pmdistest
+
+2008-06-08 14:54  cvs
+
+	* bin/pmdistest: planning to make utility to check a archive tar
+	  distro
+
+2008-04-15 10:35  cvs
+
+	* bin/pmusing: expanded pmusing to seek sub usage
+
+2008-04-08 22:27  cvs
+
+	* Makefile.PL, bin/pmmakefile, bin/pmmanifest, bin/pmused,
+	  lib/LEOCHARRE/Dev.pm, t/0_dev.t: added makefile.pl maker
+
+2008-04-07 09:53  cvs
+
+	* MANIFEST, Makefile.PL, bin/pmpodoutline: added pmpodoutline bin
+
+2007-07-26 18:40  cvs
+
+	* MANIFEST, Makefile.PL, bin/pmtestcheck: added test checked
+
+2007-07-25 12:56  cvs
+
+	* MANIFEST, Makefile.PL, bin/pmused, bin/pmver, bin/unbleach,
+	  lib/LEOCHARRE/DEBUG.pm, lib/LEOCHARRE/Dev.pm,
+	  lib/LEOCHARRE/PMUsed.pm, t/0.t, t/1_pmused.t, t/inherit_debug.pm,
+	  t/mockdev/bin/notperl, t/mockdev/bin/yesperl,
+	  t/mockdev/lib/Mock.pm: Initial revision
+
+2007-07-25 12:56  cvs
+
+	* MANIFEST, Makefile.PL, bin/pmused, bin/pmver, bin/unbleach,
+	  lib/LEOCHARRE/DEBUG.pm, lib/LEOCHARRE/Dev.pm,
+	  lib/LEOCHARRE/PMUsed.pm, t/0.t, t/1_pmused.t, t/inherit_debug.pm,
+	  t/mockdev/bin/notperl, t/mockdev/bin/yesperl,
+	  t/mockdev/lib/Mock.pm: init
+

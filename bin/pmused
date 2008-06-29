@@ -3,8 +3,8 @@ use lib './lib';
 use strict;
 use base 'LEOCHARRE::CLI';
 use LEOCHARRE::PMUsed ':all';
-our $VERSION = sprintf "%d.%02d", q$Revision: 1.10 $ =~ /(\d+)/g;
-my $o = gopts('xqlsMAC');
+our $VERSION = sprintf "%d.%02d", q$Revision: 1.11 $ =~ /(\d+)/g;
+my $o = gopts('xqlsMACr');
 
 if($o->{C}){
    my $files = argv_aspaths();
@@ -124,9 +124,10 @@ sub showresults {
          print "$module_name".( $o->{l} ? "\n" : ' ' );
       }
       else {
-         
+         my $ropt = '';
+         if ($o->{r}) { $ropt = '-r' ; }
       
-         my $version = `pmver $module_name 2>/dev/null`;
+         my $version = `pmver $ropt $module_name 2>/dev/null`;
          $version ||= 0;
          $version < 100 or $version = 0;
       
@@ -171,6 +172,7 @@ Also you can have a pretty format for using with cpan install.
    -s single line
    
    -M print as code for Makefile.PL
+   -r change versions like v1.0.0 to 1, 0.234 to 0
    -A show *all* modules used, including strict, vars, etc.
 
    -C run cpan for each missing module, does it once per module missing (-x)

@@ -1,0 +1,54 @@
+#!/usr/bin/perl
+use strict;
+use base 'LEOCHARRE::CLI';
+#use LEOCHARRE::Dev ':all';
+
+use vars qw($VERSION);
+$VERSION = sprintf "%d.%02d", q$Revision: 1.1 $ =~ /(\d+)/g;
+   
+my $o= gopts();
+
+sub usage {
+   return qq{
+$0
+
+   -h help
+   -d debut
+   -v version
+
+USAGE EXAMPLES
+
+   $0 > MANIFEST
+
+   }; 
+}
+
+my $abs_d= $ARGV[0];
+$abs_d ||= './';
+
+-d $abs_d
+   or warn ("$abs_d is not dir")
+   and exit;
+
+is_pmdist($abs_d) or exit;
+
+
+
+
+my @files = map { s/^\.\///; $_ } sort grep { !/\/CVS|\.gz$/ } split( /\n/, `find '$abs_d' -type f`);
+
+print join "\n",@files;
+
+
+sub is_pmdist {
+   my $d = shift;
+   -d $d
+      or warn("$d is not dir")
+      and return;
+
+   -f "$d/Makefile.PL"
+      or warn("$d is not dist, no Makefile.PL")
+      and return 0;
+
+   return 1;
+}

@@ -1,0 +1,102 @@
+#!/usr/bin/perl
+use strict;
+use base 'LEOCHARRE::CLI';
+
+use LEOCHARRE::Dev ':all';
+our $VERSION = sprintf "%d.%02d", q$Revision: 1.4 $ =~ /(\d+)/g;
+
+my $o = gopts('br');
+
+if ($o->{b}){
+	print <DATA>;
+	exit;
+}
+
+
+
+my $out = join( '', <DATA>);
+
+# analize 
+my $abs_d = is_pmdist( $ARGV[0] ) or die;
+
+if( my $val = pmdist_guess_name($abs_d) ){
+	
+	$out=~s/NAME \=\> ''/NAME => '$val'/;
+
+}
+
+
+if( my $val = pmdist_guess_version_from($abs_d)  ){
+
+	$out=~s/VERSION_FROM \=\> ''/VERSION_FROM => '$val'/;
+}
+
+
+if( my @exe = grep { /^bin\// } ls_pmdist($abs_d) ){
+	local $"="\n\t\t" if (scalar @exe > 3);
+	my $q = "[qw(@exe)]";
+
+	$out=~s/EXE_FILES \=\> \[\]/EXE_FILES => $q/;
+}
+
+my $ropt ='';
+if ($o->{r}){ $ropt = ' -r '; }
+
+if ( my $prereq = `pmused $ropt -M '$abs_d'` ){
+
+	$out=~s/   PREREQ_PM \=\> \{\},/$prereq/;
+	debug('got pmused');
+}
+
+
+print $out;
+
+
+
+
+sub usage {
+
+	return qq{
+$0 
+
+DESCRIPTION
+
+Analizes a target perl distro and prints a Makefile.PL to stdout,
+analizes dependencies, name, etc.
+
+OPTION FLAGS
+	-b print blank Makefile.Pl to stdout 
+	-r trim things like v1.0.0 to 1, 0.235 to 0, 12.35 to 12
+	-h help
+	-v version and exit
+	-h help
+
+PARAMETERS
+
+abs path to dist dir
+
+SEE ALSO
+
+LEOCHARRE::Dev
+	};
+
+}
+
+
+
+
+
+
+__DATA__
+use ExtUtils::MakeMaker;
+
+WriteMakefile(
+   NAME => '',
+   VERSION_FROM => '',
+
+   PREREQ_PM => {},
+
+   EXE_FILES => [],
+);
+
+

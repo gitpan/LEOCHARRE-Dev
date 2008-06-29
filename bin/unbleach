@@ -22,11 +22,9 @@ unbleach.pl [file]
 =head1 DESCRIPTION
 
 This script will replace all the unsighted unprintable 
-characters bleached out of your source file by a:
+characters bleached out of your source file by Acme::Bleach.
  
-    use Acme::Bleach;
- 
-directive with elegant (perhaps) ASCII perl code. 
+And turn it into directive with elegant (perhaps) ASCII perl code. 
 
 It also removes the use bleach line when it rewrites 
 the source code. The code continues to work exactly 
@@ -55,10 +53,3 @@ http://www.perlmonks.com
 =head1 AUTHOR
 
 not Damian Conway (as if you couldn't guess)
-
-=head1 COPYRIGHT
-
-Copyright (c) 2001, tachyon. All Rights Reserved.
-This script is free software. It may be used, redistributed
-and/or modified under the terms of the Perl Artistic License
-(see http://www.perl.com/perl/misc/Artistic.html)

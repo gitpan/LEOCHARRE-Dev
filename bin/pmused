@@ -3,7 +3,7 @@ use lib './lib';
 use strict;
 use base 'LEOCHARRE::CLI';
 use LEOCHARRE::PMUsed ':all';
-our $VERSION = sprintf "%d.%02d", q$Revision: 1.11 $ =~ /(\d+)/g;
+our $VERSION = sprintf "%d.%02d", q$Revision: 1.13 $ =~ /(\d+)/g;
 my $o = gopts('xqlsMACr');
 
 if($o->{C}){
@@ -124,8 +124,22 @@ sub showresults {
          print "$module_name".( $o->{l} ? "\n" : ' ' );
       }
       else {
+         my $modules_simpler_version = {
+            CGI => 1,
+            Carp => 1,
+            Exporter => 1,
+            'Test::Simple' => 1,
+            'ExtUtils::MakeMaker' => 1,
+            'Smart::Comments' => 1,
+            Cwd => 1,
+
+         };
+
          my $ropt = '';
-         if ($o->{r}) { $ropt = '-r' ; }
+         if ( $o->{r} or $modules_simpler_version->{$module_name} ) { $ropt = '-r' ; } # to get numbers like 1 instead of 1.23
+         # also if a general module
+         
+
       
          my $version = `pmver $ropt $module_name 2>/dev/null`;
          $version ||= 0;
@@ -147,6 +161,8 @@ sub _skip_module {
    
    return ( $name=~/^[A-Z]\w+/ ? 0 : 1 ); 
 }
+
+__END__
 
 =pod
 

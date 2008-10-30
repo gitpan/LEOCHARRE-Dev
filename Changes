@@ -1,3 +1,31 @@
+2008-10-01 13:48  cvs
+
+	* bin/pmmakefile: made so general basic modules like Cwd and Carp
+	  do not require very specific version numbers
+
+2008-10-01 13:38  cvs
+
+	* lib/LEOCHARRE/Dev.pm: added debug and improved where to seek
+	  version from in distro
+
+2008-09-22 16:13  cvs
+
+	* MANIFEST, Makefile.PL, bin/pmmanifest: made so pmmanifest will
+	  not enter dev entries
+
+2008-09-03 15:37  cvs
+
+	* bin/: pmpod, pmused: made so pmpod works with pm and pl files
+
+2008-09-03 12:51  cvs
+
+	* bin/pmmanifest: made sure to grep out vim swap files
+
+2008-07-28 16:32  cvs
+
+	* MANIFEST, Makefile.PL, bin/pmvercpan: added stuff to auto update
+	  perl modules
+
 2008-06-26 07:17  cvs
 
 	* bin/pmchanges: making sure to prune empty changes, only show

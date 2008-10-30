@@ -1,7 +1,7 @@
 # http://module-build.sourceforge.net/META-spec.html
 #XXXXXXX This is a prototype!!!  It will change in the future!!! XXXXX#
 name:         LEOCHARRE-Dev
-version:      1.07
+version:      1.08
 version_from: lib/LEOCHARRE/Dev.pm
 installdirs:  site
 requires:
@@ -11,14 +11,15 @@ requires:
     Cwd:                           3.12
     Data::Dumper:                  2.121_08
     Devel::AssertEXE:              0
-    Devel::ModInfo:                0
+    Devel::ModInfo:                0.05
     Devel::Symdump:                2.07
     Exporter:                      5.58
-    ExtUtils::MakeMaker:           6.30
+    ExtUtils::MakeMaker:           6.44
     File::Basename:                2.74
     File::Find:                    1.10
     File::Find::Rule:              0.30
     File::Path:                    1.08
+    Getopt::Std::Strict:           1.01
     HTTP::Request::Common:         1.26
     HTTP::Status:                  1.28
     LEOCHARRE::CLI:                1.18
@@ -26,10 +27,11 @@ requires:
     LWP::UserAgent:                2.033
     Module::Info:                  0.3
     Net::FTP:                      2.75
-    Smart::Comments:               v1.0.2
+    Smart::Comments:               1.0.2
     Term::ReadKey:                 2.30
     Test2:                         0
-    Test::Simple:                  0.7
+    Test::Simple:                  0.8
+    WWW::CPAN:                     0.011
 
 distribution_type: module
-generated_by: ExtUtils::MakeMaker version 6.30
+generated_by: ExtUtils::MakeMaker version 6.17

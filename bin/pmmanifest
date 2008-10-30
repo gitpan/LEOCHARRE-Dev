@@ -1,20 +1,21 @@
 #!/usr/bin/perl
 use strict;
 use base 'LEOCHARRE::CLI';
-#use LEOCHARRE::Dev ':all';
-
 use vars qw($VERSION);
-$VERSION = sprintf "%d.%02d", q$Revision: 1.1 $ =~ /(\d+)/g;
+$VERSION = sprintf "%d.%02d", q$Revision: 1.3 $ =~ /(\d+)/g;
    
 my $o= gopts();
 
 sub usage {
    return qq{
-$0
+$0 - create MANIFEST file
 
    -h help
    -d debut
    -v version
+   -d debug on, shows what's grepped out
+
+Will grep out .swp files, CVS, .gz, .dev.
 
 USAGE EXAMPLES
 
@@ -33,9 +34,22 @@ $abs_d ||= './';
 is_pmdist($abs_d) or exit;
 
 
+sub include_file {
+   my $file = shift;
+
+   my $ok = 1;
+   
+   if ( $file=~/\/CVS|\.gz$|.swp$|\bdev\b/ ){
+      $ok = 0;
+   }
+   if (DEBUG){
+      print STDERR ($ok ? '' : '  no: ')."$file\n";
+   }
+   return $ok;
+}
 
 
-my @files = map { s/^\.\///; $_ } sort grep { !/\/CVS|\.gz$/ } split( /\n/, `find '$abs_d' -type f`);
+my @files = map { s/^\.\///; $_ } sort grep { include_file($_) } split( /\n/, `find '$abs_d' -type f`);
 
 print join "\n",@files;
 

@@ -3,15 +3,18 @@ use strict;
 use base 'LEOCHARRE::CLI';
 
 use LEOCHARRE::Dev ':all';
-our $VERSION = sprintf "%d.%02d", q$Revision: 1.4 $ =~ /(\d+)/g;
+our $VERSION = sprintf "%d.%02d", q$Revision: 1.6 $ =~ /(\d+)/g;
 
-my $o = gopts('br');
+my $o = gopts('brd');
 
 if ($o->{b}){
 	print <DATA>;
 	exit;
 }
 
+if ($o->{d}){
+   $LEOCHARRE::Dev::DEBUG = 1;
+}
 
 
 my $out = join( '', <DATA>);
@@ -25,10 +28,11 @@ if( my $val = pmdist_guess_name($abs_d) ){
 
 }
 
-
 if( my $val = pmdist_guess_version_from($abs_d)  ){
-
+   debug("Asked where to get ver from $abs_d");
 	$out=~s/VERSION_FROM \=\> ''/VERSION_FROM => '$val'/;
+} else {
+   $out=~s/VERSION_FROM \=\> ''/# VERSION_FROM => ''/;
 }
 
 
@@ -56,13 +60,12 @@ print $out;
 
 sub usage {
 
-	return qq{
-$0 
+	return qq{$0 
 
 DESCRIPTION
 
 Analizes a target perl distro and prints a Makefile.PL to stdout,
-analizes dependencies, name, etc.
+Analizes dependencies, name, etc.
 
 OPTION FLAGS
 	-b print blank Makefile.Pl to stdout 

@@ -4,10 +4,9 @@ use base 'LEOCHARRE::CLI';
 
 my $o = gopts('r');
 
-
 scalar @ARGV or die('missing modules args');
 
-my $manymods = scalar @ARGV > 1 ? 1 : 0;
+my $manymods = (scalar @ARGV > 1) ? 1 : 0;
 
 
 map { do_one($_) } @ARGV;
@@ -34,6 +33,7 @@ USAGE EXAMPLES
 
    $0 CPAN
    $0 Cwd
+   $0 ./lib/MOD.pm
 
 SEE ALSO
 
@@ -45,14 +45,27 @@ LEOCHARRE::Dev
 
 
 sub do_one {
-   my $modname = shift;
-
-   debug("modname $modname");
+   my $arg = shift;
 
    my $ver;
    no strict 'refs';
 
-   if ( eval "require $modname" ){
+   #if ($arg=~/\//){
+   #   if ( -f $arg ){
+   #      if( eval "require '$arg'" ){
+   #         $ver = ${"$modname\:\:VERSION"};
+   #         defined $ver or debug("no version in $arg");
+
+            
+    #     }
+    #  }
+   #}
+   
+   my $modname = $arg;
+
+   debug("modname $modname");
+
+   if ( $modname!~/\// and eval "require $modname" ){ # TODO this executes the code!! OH NO
       
       debug($modname);
 

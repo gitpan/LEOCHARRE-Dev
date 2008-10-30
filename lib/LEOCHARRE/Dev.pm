@@ -3,12 +3,13 @@ use strict;
 use Exporter;
 
 use vars qw($VERSION @ISA @EXPORT_OK %EXPORT_TAGS);
-$VERSION = sprintf "%d.%02d", q$Revision: 1.7 $ =~ /(\d+)/g;
+$VERSION = sprintf "%d.%02d", q$Revision: 1.8 $ =~ /(\d+)/g;
 @EXPORT_OK = qw(is_pmdist ls_pmdist pmdist_guess_name pmdist_guess_version_from);
 @ISA = qw/Exporter/;
 %EXPORT_TAGS = ( 'all' => \@EXPORT_OK );
 
-
+$LEOCHARRE::Dev::DEBUG = 1;
+sub debug { print STDERR " - @_\n" if $LEOCHARRE::Dev::DEBUG; 1 }
 
 sub _show_symbol_table {
   require Data::Dumper;
@@ -44,7 +45,7 @@ sub ls_pmdist {
    my $abs_d = is_pmdist($d)  or die;
 
    my @ls;
-   for my $distfile ( sort grep { !/CVS/ } split( /\n/, `find '$abs_d' -type f`) ){
+   for my $distfile ( sort grep { !/CVS|\.swp$/ } split( /\n/, `find '$abs_d' -type f`) ){
       $distfile=~s/^$abs_d\///;
       push @ls,$distfile;
    }
@@ -56,9 +57,14 @@ sub ls_pmdist {
 sub pmdist_guess_name {
       my $d = shift;
       $d ||= './';
+      
       my $abs_d = is_pmdist($d)  or die;
+      $abs_d=~s/^\/.+\/devel\///;
+      print STDERR " dist nameguess $abs_d\n";
+
       $abs_d=~s/.+\///;
       $abs_d=~s/\-/::/g;
+      print STDERR " returning $abs_d\n";
    return $abs_d;
    
 }
@@ -73,11 +79,20 @@ sub pmdist_guess_version_from {
       $distname.='.pm';
       my $pm = $distname;
       if (-f "$abs_d/$distname"){
+         debug("found $abs_d/$distname.");
+
          return $distname;
       }
+      elsif( -f "$abs_d/lib/$distname"){
+         debug("found $abs_d/lib/$distname.");
+
+         return "lib/$distname";
+      }
+      debug("Got distname $distname but could not match a file.");
    }
 
-   my @pm = grep { /pm$/ } ls_pmdist($d) or return;
+   debug("did not get distname from pmdist_guess_name()"); 
+   my @pm = grep { /\.pm$/ } ls_pmdist($d) or return;
    my $first = shift @pm;
    return $first;
 
@@ -95,6 +110,10 @@ __END__
 =head1 NAME
 
 LEOCHARRE::Dev
+
+=head1 DESCRIPTION
+
+This package is a collection of modules and scripts to aid in development.
 
 =head1 SUBS
 
@@ -119,8 +138,8 @@ Returns list of files relative to dist dir, with no leading slash. (not array re
 Leaves out CVS entries.
 
 
-
-
 =head1 Executables
 
 A number of useful perl module tools are present to aid in development.
+
+

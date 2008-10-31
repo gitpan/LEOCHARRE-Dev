@@ -1,3 +1,13 @@
+2008-10-31 09:44  cvs
+
+	* bin/pmmakefile, lib/LEOCHARRE/PMUsed.pm: added a test to see if a
+	  module used is in ./t/, to skip it
+
+2008-10-15 14:15  cvs
+
+	* Changes, MANIFEST, bin/pmtodo: made some improvement in pmtodo,
+	  still needs real work
+
 2008-10-01 13:48  cvs
 
 	* bin/pmmakefile: made so general basic modules like Cwd and Carp

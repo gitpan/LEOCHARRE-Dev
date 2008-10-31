@@ -3,7 +3,7 @@ use strict;
 use base 'LEOCHARRE::CLI';
 
 use LEOCHARRE::Dev ':all';
-our $VERSION = sprintf "%d.%02d", q$Revision: 1.6 $ =~ /(\d+)/g;
+our $VERSION = sprintf "%d.%02d", q$Revision: 1.7 $ =~ /(\d+)/g;
 
 my $o = gopts('brd');
 
@@ -76,7 +76,13 @@ OPTION FLAGS
 
 PARAMETERS
 
-abs path to dist dir
+Abs path to dist dir.
+The distro dir must contain a Makefile.PL, you can touch a blank one if you want.
+
+USAGE EXAMPLES
+
+   $0 ./dev/My-Distro
+   $0 ./dev/My-Distro > ./dev/My-Distro/Makefile.PL
 
 SEE ALSO
 

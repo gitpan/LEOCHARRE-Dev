@@ -34,9 +34,7 @@ close PMF;
 debug("wrote module ".scalar @pm);
 
 _file_prepend( $abs_makefile,
-qq{use lib inc;
-use Devel::AssertEXE qw(@ARGV);
-});
+qq{use lib incu;\nuse Devel::AssertEXE qw(@ARGV);\n});
 
 _file_prepend( $abs_manifest, 'inc/Devel/AssertEXE.pm' );
 

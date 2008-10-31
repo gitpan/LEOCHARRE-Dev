@@ -1,10 +1,11 @@
 Changes
 MANIFEST
+META.yml
 Makefile.PL
+README
 bin/cpanupload
 bin/cvs2cl
 bin/devdebug-httpd
-bin/dyercvsinstall
 bin/pinstall
 bin/pmassertexe
 bin/pmassertos
@@ -35,7 +36,6 @@ lib/LEOCHARRE/Dev.pm
 lib/LEOCHARRE/PMInspect.pm
 lib/LEOCHARRE/PMSubs.pm
 lib/LEOCHARRE/PMUsed.pm
-lib/LEOCHARRE/Test.pm
 t/0_dev.t
 t/1_pmused.t
 t/2_debugtest2.t
@@ -50,4 +50,3 @@ t/code2.pm
 t/mockdev/bin/notperl
 t/mockdev/bin/yesperl
 t/mockdev/lib/Mock.pm
-META.yml                                 Module meta-data (added by MakeMaker)

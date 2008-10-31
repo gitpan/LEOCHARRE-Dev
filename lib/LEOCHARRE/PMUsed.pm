@@ -8,7 +8,7 @@ use strict;
 @EXPORT_OK =qw(module_is_installed find_code_files modules_used modules_used_scan_tree);
 %EXPORT_TAGS = ( all => \@EXPORT_OK );
 
-$VERSION = sprintf "%d.%02d", q$Revision: 1.6 $ =~ /(\d+)/g;
+$VERSION = sprintf "%d.%02d", q$Revision: 1.8 $ =~ /(\d+)/g;
 
 $LEOCHARRE::PMUsed::DEBUG = 0;
 sub DEBUG : lvalue {$LEOCHARRE::PMUsed::DEBUG}
@@ -79,8 +79,9 @@ sub find_code_files {
 
 
 sub modules_used {
-   my $abs_code = shift;
+   my ($abs_code,$skip_t) = @_;
    (-f $abs_code) or carp("argument to modules_userd() [$abs_code] is not a file.") and return;
+   
    
    my $lines = [];
    my $modules = {};
@@ -92,13 +93,14 @@ sub modules_used {
    
    close FILE;
 
-   LINES: for(@$lines){
+   LINE: for(@$lines){
       my $line = $_;
 
       $line=~s/#\s.+$//g; # take out comments
       
       if ( $line=~/use base '([^\']+)'/ ){
-         $modules->{$1}++;
+         my $module = $1;
+         $modules->{$module}++;
       }
       elsif ( $line=~/use base qw\W([\s\w\:]+)\W/){
          my @mods = split(/\s/,$1);
@@ -107,30 +109,49 @@ sub modules_used {
 
       
       elsif( $line=~/^use\s+([\w\:]+)[\s;]/s ){      
-         $modules->{$1}++;            
+         my $module = $1;         
+         $modules->{$module}++;            
       }
       elsif ($line=~/^[\W]*use\s+([\w\:]+)[\s;]/s){
-         $modules->{$1}++;         
+         my $module = $1;
+         $modules->{$module}++;         
       }
             
       if ( $line=~/require\s+([\w\:]+)\s*;/s ){
-         my $module = $1;
-         
+         my $module = $1;         
          if( $module=~/\.pl$|\.pm$/ or $module=~/^\./ ){
             # then skip, it's a include
-            next LINES;
+            next LINE;
          }
          $modules->{$module}++;
       }   
+      
       
    
    }
 
 
+   # take out ones non wanted/needed
+
+   for my $module_name ( keys %$modules ){   
+      _module_name_is_in_t($module_name) and delete $modules->{$module_name};
+      
+   }
+
+   # lousy hack
+   $modules->{'Devel::AssertEXE'};
    
    return $modules;
 }
 
+
+
+sub _module_name_is_in_t {
+   my $name = shift;
+   $name=~s/\:\:/\//g;
+   $name.='.pm';
+   ( -e "./t/$name") ? 1 : 0;
+}
 
 sub modules_used_scan_tree {
    my $abs_dir = shift;

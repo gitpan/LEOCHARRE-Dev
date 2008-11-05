@@ -1,9 +1,9 @@
 #!/usr/bin/perl
 use strict;
 use base 'LEOCHARRE::CLI';
-
 use LEOCHARRE::Dev ':all';
-our $VERSION = sprintf "%d.%02d", q$Revision: 1.7 $ =~ /(\d+)/g;
+
+our $VERSION = sprintf "%d.%02d", q$Revision: 1.8 $ =~ /(\d+)/g;
 
 my $o = gopts('brd');
 
@@ -102,7 +102,8 @@ use ExtUtils::MakeMaker;
 WriteMakefile(
    NAME => '',
    VERSION_FROM => '',
-
+   
+   LICENSE => 'perl',
    PREREQ_PM => {},
 
    EXE_FILES => [],

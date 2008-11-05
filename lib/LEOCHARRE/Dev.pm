@@ -2,7 +2,7 @@ package LEOCHARRE::Dev;
 use strict;
 use Exporter;
 use vars qw($VERSION @ISA @EXPORT_OK %EXPORT_TAGS);
-$VERSION = sprintf "%d.%02d", q$Revision: 1.9 $ =~ /(\d+)/g;
+$VERSION = sprintf "%d.%02d", q$Revision: 1.10 $ =~ /(\d+)/g;
 @EXPORT_OK = qw(is_pmdist ls_pmdist pmdist_guess_name pmdist_guess_version_from);
 @ISA = qw/Exporter/;
 %EXPORT_TAGS = ( 'all' => \@EXPORT_OK );
@@ -15,7 +15,6 @@ sub _show_symbol_table {
    
   print STDERR " SYMBOL TABLE\n" . Data::Dumper::Dumper(\%LEOCHARRE::Dev::);
   print STDERR "\n";
-
 
 }
 

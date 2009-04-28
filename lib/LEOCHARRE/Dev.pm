@@ -2,7 +2,7 @@ package LEOCHARRE::Dev;
 use strict;
 use Exporter;
 use vars qw($VERSION @ISA @EXPORT_OK %EXPORT_TAGS);
-$VERSION = sprintf "%d.%02d", q$Revision: 1.10 $ =~ /(\d+)/g;
+$VERSION = sprintf "%d.%02d", q$Revision: 1.11 $ =~ /(\d+)/g;
 @EXPORT_OK = qw(is_pmdist ls_pmdist pmdist_guess_name pmdist_guess_version_from);
 @ISA = qw/Exporter/;
 %EXPORT_TAGS = ( 'all' => \@EXPORT_OK );
@@ -90,9 +90,22 @@ sub pmdist_guess_version_from {
    }
 
    debug("did not get distname from pmdist_guess_name()"); 
-   my @pm = grep { /\.pm$/ } ls_pmdist($d) or return;
-   my $first = shift @pm;
-   return $first;
+   
+   my @pms = grep { /\.pm$/ and !/^blib\// and !/^t\// } ls_pmdist($d);
+   @pms and scalar @pms or return;
+
+   my @libpms = grep { /^lib\// } @pms;
+   if (@libpms and scalar @libpms ){ # return first
+      return $libpms[0];
+   }
+
+   # any other?
+   return $pms[0];
+
+
+   #my @pm = grep { /\.pm$/ } ls_pmdist($d) or return;
+   #my $first = shift @pm;
+   #return $first;
 
 }
 

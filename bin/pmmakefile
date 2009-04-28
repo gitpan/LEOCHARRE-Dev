@@ -1,11 +1,16 @@
 #!/usr/bin/perl
 use strict;
+use lib './lib';
 use base 'LEOCHARRE::CLI';
 use LEOCHARRE::Dev ':all';
+use vars qw/$VERSION/;
+$VERSION = sprintf "%d.%02d", q$Revision: 1.14 $ =~ /(\d+)/g;
 
-our $VERSION = sprintf "%d.%02d", q$Revision: 1.8 $ =~ /(\d+)/g;
 
-my $o = gopts('brd');
+
+my $o = gopts('brda:p');
+
+
 
 if ($o->{b}){
 	print <DATA>;
@@ -28,11 +33,23 @@ if( my $val = pmdist_guess_name($abs_d) ){
 
 }
 
+
+# AUTHOR
+
+my $author = $o->{a} ? "AUTHOR => '$$o{a}'," : '';
+$out=~s/AUTHOR \=\> '',/$author/;
+
+
+
 if( my $val = pmdist_guess_version_from($abs_d)  ){
    debug("Asked where to get ver from $abs_d");
 	$out=~s/VERSION_FROM \=\> ''/VERSION_FROM => '$val'/;
 } else {
-   $out=~s/VERSION_FROM \=\> ''/# VERSION_FROM => ''/;
+   
+   my $_code = q|VERSION => ( sprintf "%d.%02d", q$Revision: 1.14 $ =~ /(\d+)/g )|;
+
+
+   $out=~s/VERSION_FROM \=\> ''/$_code/;
 }
 
 
@@ -52,6 +69,11 @@ if ( my $prereq = `pmused $ropt -M '$abs_d'` ){
 	debug('got pmused');
 }
 
+# FORCE POSIX
+if ($o->{p}){
+	$out = q{$^O=~/win32|mswin/i and die("OS not supported.\n");}. "\n$out";
+}
+
 
 print $out;
 
@@ -60,34 +82,31 @@ print $out;
 
 sub usage {
 
-	return qq{$0 
+	qq{Usage: $0 [OPTION]... PATH...
+Analize distro and print Makefile.PL to stdout.
 
-DESCRIPTION
+	-b 			print blank Makefile.Pl to stdout 
+	-r 			trim things like v1.0.0 to 1, 0.235 to 0, 12.35 to 12
+	-h 			help
+	-v 			version and exit
+	-d				debug
+	-a string	author
+	-p				force posix, makefile does not send fail reports from windows os
 
-Analizes a target perl distro and prints a Makefile.PL to stdout,
-Analizes dependencies, name, etc.
 
-OPTION FLAGS
-	-b print blank Makefile.Pl to stdout 
-	-r trim things like v1.0.0 to 1, 0.235 to 0, 12.35 to 12
-	-h help
-	-v version and exit
-	-h help
+PATH
 
-PARAMETERS
-
-Abs path to dist dir.
+Path to dist dir.
 The distro dir must contain a Makefile.PL, you can touch a blank one if you want.
 
 USAGE EXAMPLES
 
    $0 ./dev/My-Distro
    $0 ./dev/My-Distro > ./dev/My-Distro/Makefile.PL
+	$0
 
-SEE ALSO
-
-LEOCHARRE::Dev
-	};
+LEOCHARRE::Dev - parent package
+};
 
 }
 
@@ -103,9 +122,12 @@ WriteMakefile(
    NAME => '',
    VERSION_FROM => '',
    
-   LICENSE => 'perl',
    PREREQ_PM => {},
-
+   
+   LICENSE => 'perl',
+   
+   AUTHOR => '',
+   
    EXE_FILES => [],
 );
 

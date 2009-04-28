@@ -1,8 +1,7 @@
 #!/usr/bin/perl
 use strict;
 use base 'LEOCHARRE::CLI';
-our $VERSION = sprintf "%d.%02d", q$Revision: 1.3 $ =~ /(\d+)/g;
-
+our $VERSION = sprintf "%d.%02d", q$Revision: 1.4 $ =~ /(\d+)/g;
 
 
 my $o = gopts('b');
@@ -20,23 +19,24 @@ $0
 
 OPTION FLAGS
    
-   -b blank module and pod output
-
+   -b    blank module and pod output
+   -h    help
    };
 }
 
 
 sub _code_version {
-   return q{$VERSION = sprintf "%d.%02d", q$Revision: 1.3 $ =~ /(\d+)/g;};
+   return q{$VERSION = sprintf "%d.%02d", q$Revision: 1.4 $ =~ /(\d+)/g;};
 }
 
 sub _code  {
    
   
 
-   my @lines = <DATA>;
-   my $code .= "@lines";
-   return $code;
+   #my @lines = map { s/^\s(?=\S)// ; $_ } <DATA>;
+   _data()
+   #my $code 
+   #return $code;
 
    
 
@@ -48,9 +48,10 @@ sub _code  {
 
 
 
-__DATA__
-
-use vars qw($VERSION); $VERSION = sprintf "%d.%02d", q$Revision: 1.3 $ =~ /(\d+)/g;
+#__DATA__
+sub _data { q|package ;
+use vars qw($VERSION); 
+$VERSION = sprintf "%d.%02d", q$Revision: 1.4 $ =~ /(\d+)/g;
 
 1;
 
@@ -64,13 +65,15 @@ use vars qw($VERSION); $VERSION = sprintf "%d.%02d", q$Revision: 1.3 $ =~ /(\d+)
 
 =head1 CAVEATS
 
+=head1 SEE ALSO
+
 =head1 AUTHOR
 
 Leo Charre leocharre at cpan dot org
 
 =head1 COPYRIGHT
 
-Copyright (c) 2008 Leo Charre. All rights reserved.
+Copyright (c) 2009 Leo Charre. All rights reserved.
 
 =head1 LICENSE
 
@@ -82,5 +85,5 @@ This package is distributed in the hope that it will be useful, but WITHOUT ANY 
 
 See the "GNU General Public License" for more details.
    
-
-
+=cut
+|}

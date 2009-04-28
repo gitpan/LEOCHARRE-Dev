@@ -2,7 +2,7 @@
 use strict;
 use base 'LEOCHARRE::CLI';
 use vars qw($VERSION);
-$VERSION = sprintf "%d.%02d", q$Revision: 1.3 $ =~ /(\d+)/g;
+$VERSION = sprintf "%d.%02d", q$Revision: 1.4 $ =~ /(\d+)/g;
    
 my $o= gopts();
 
@@ -51,7 +51,10 @@ sub include_file {
 
 my @files = map { s/^\.\///; $_ } sort grep { include_file($_) } split( /\n/, `find '$abs_d' -type f`);
 
-print join "\n",@files;
+for my $line (@files){
+   $line=~/\s/ and $line="'$line'";
+   print "$line\n";
+}
 
 
 sub is_pmdist {

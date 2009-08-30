@@ -5,7 +5,7 @@ use LEOCHARRE::PMSubs qw(subs_defined _subs_defined _subs_used subs_used);
 
 $LEOCHARRE::PMSubs::DEBUG = 1;
 
-use Smart::Comments '###';
+# use Smart::Comments '###';
 
 ok(1);
 

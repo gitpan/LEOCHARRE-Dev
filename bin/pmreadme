@@ -2,6 +2,7 @@
 use strict;
 use Getopt::Std::Strict 'h';
 use Cwd;
+use Time::Format;
 my $abs_d = $ARGV[0] || cwd();
 
 
@@ -40,7 +41,10 @@ sub readme_output {
    my $projectname = `pmname '$abs_d'`;
    chomp $projectname;
 
-   qq{$projectname
+   my $yyyy = Time::Format::time_format('yyyy', time());
+
+
+   qq{$projectname 
 ===============================================
 
 INSTALLATION
@@ -53,7 +57,7 @@ DEPENDENCIES
 
 COPYRIGHT AND LICENCE
 
-Copyright (C) 2008 by Leo Charre leocharre at cpan dot org
+Copyright (C) $yyyy by Leo Charre leocharre at cpan dot org
 
 This library is free software; you can redistribute it and/or modify
 it under the same terms as Perl itself, either Perl version 5.8.8 or,

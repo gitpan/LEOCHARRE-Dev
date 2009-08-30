@@ -4,7 +4,7 @@ use lib './lib';
 use LEOCHARRE::Test;
 use LEOCHARRE::PMUsed ':all';
 use Cwd;
-use Smart::Comments '###';
+# use Smart::Comments '###';
 use Carp;
 use Data::Dumper;
 

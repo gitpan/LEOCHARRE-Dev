@@ -1,3 +1,42 @@
+2009-08-29 21:20  cvs
+
+	* LEOCHARRE-Dev-1.03.tar.gz, Makefile.PL, README,
+	  lib/LEOCHARRE/Dev.pm: Made sure proper license shows up, perl
+	  gpl.	Cleaned up docs and README
+
+2009-08-14 11:17  cvs
+
+	* MANIFEST, Makefile.PL, bin/pmuseoff: removed pmuseoff, because we
+	  have the more current and better documented bin/pmonoff
+
+2009-08-14 11:10  cvs
+
+	* bin/pmonoff: added pmonoff, to edit code in perl files, turning
+	  module use off or on, optionally overriting also backs up old
+	  file
+
+2009-06-24 14:40  cvs
+
+	* bin/pmreadme: updated so readme will contain current year
+
+2009-05-18 16:55  cvs
+
+	* bin/pmmakefile: made sure if .h or .h or pod files are in bin,
+	  they are not treated as exe files
+
+2009-05-05 15:01  cvs
+
+	* bin/pmclassinspector: added conveninent cli class inspector
+
+2009-04-09 15:49  cvs
+
+	* bin/pmmanifest: made so manifest quotes if the filename has
+	  spaces
+
+2009-03-30 11:48  cvs
+
+	* bin/pmdistupdate: made sure pmdistupdate needs not arg
+
 2009-03-06 16:43  cvs
 
 	* lib/LEOCHARRE/Dev.pm: made version from finder better

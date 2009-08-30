@@ -3,7 +3,7 @@ use strict;
 use vars qw(@POD_SECTIONS_PM @POD_SECTIONS_CLI @POD_SECTIONS_WHITEPAPER $VERSION
 @ABS_IN_PM @ABS_IN_CLI $ABS_IN_PM_COUNT $ABS_IN_CLI_COUNT %_datahash @infiles);
 use Cwd;
-use Smart::Comments '###';
+# use Smart::Comments '###';
 use base 'LEOCHARRE::CLI';
 my $o = gopts('d');
 

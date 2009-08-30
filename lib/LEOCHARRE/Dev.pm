@@ -2,7 +2,7 @@ package LEOCHARRE::Dev;
 use strict;
 use Exporter;
 use vars qw($VERSION @ISA @EXPORT_OK %EXPORT_TAGS);
-$VERSION = sprintf "%d.%02d", q$Revision: 1.11 $ =~ /(\d+)/g;
+$VERSION = sprintf "%d.%02d", q$Revision: 1.12 $ =~ /(\d+)/g;
 @EXPORT_OK = qw(is_pmdist ls_pmdist pmdist_guess_name pmdist_guess_version_from);
 @ISA = qw/Exporter/;
 %EXPORT_TAGS = ( 'all' => \@EXPORT_OK );
@@ -120,11 +120,26 @@ __END__
 
 =head1 NAME
 
-LEOCHARRE::Dev
+LEOCHARRE::Dev - tools to help manage distro development and maintenance
 
 =head1 DESCRIPTION
 
 This package is a collection of modules and scripts to aid in development.
+Most of the functionality is in the set of cli scripts provided in distro,
+these reside under bin/
+
+This distro is a set of tools to help me manage a distro- and development.
+It is in my namespace because a lot of the scripts and methods here are already available in other packages.
+
+I find these set of tools very valuable.
+
+For example, 
+
+   - automatically generate pod from source
+   - analize your distro and tell what modules are deps and what versions are currently installed
+   - auto Makefile.PL and MANIFEST generation
+   - check out what version of a module is installed and if it's the most current on cpan
+   - etc
 
 =head1 SUBS
 
@@ -148,9 +163,28 @@ Returns list of files relative to dist dir, with no leading slash. (not array re
 
 Leaves out CVS entries.
 
-
 =head1 Executables
 
 A number of useful perl module tools are present to aid in development.
+
+=head1 AUTHOR
+
+Leo Charre leocharre at cpan dot org
+
+=head1 COPYRIGHT
+
+Copyright (c) 2009 Leo Charre. All rights reserved.
+
+=head1 LICENSE
+
+This package is free software; you can redistribute it and/or modify it under the same terms as Perl itself, i.e., under the terms of the "Artistic License" or the "GNU General Public License".
+
+=head1 DISCLAIMER
+
+This package is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+
+See the "GNU General Public License" for more details.
+   
+=cut
 
 

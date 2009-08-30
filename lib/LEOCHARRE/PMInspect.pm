@@ -2,7 +2,7 @@ package LEOCHARRE::PMInspect;
 use strict;
 use warnings;
 use Carp;
-use Smart::Comments '###';
+# use Smart::Comments '###';
 
 
 sub new {

@@ -3,38 +3,43 @@ use ExtUtils::MakeMaker;
 WriteMakefile(
    NAME => 'LEOCHARRE::Dev',
    VERSION_FROM => 'lib/LEOCHARRE/Dev.pm',
-   
+   ABSTRACT_FROM => 'lib/LEOCHARRE/Dev.pm',
+   AUTHOR => 'Leo Charre leocharre at cpan dot org',
 
-   # gen /usr/bin/pmused by Fri Mar  6 16:43:53 EST 2009 
+   # gen /usr/bin/pmused by Fri Aug 14 11:16:48 EDT 2009 
    PREREQ_PM => {
       'AppConfig::Std'                    => '1.07',
       'Carp'                              => '1',
+      'Class::Inspector'                  => '1.23',
       'Cwd'                               => '3',
-      'Data::Dumper'                      => '2.121_08',
-      'Devel::ModInfo'                    => '0.05',
+      'DMS'                               => '1.56',
+      'Data::Dumper'                      => '2.121_02',
+      'Devel::ModInfo'                    => '0',
       'Devel::Symdump'                    => '2.07',
       'Exporter'                          => '5',
       'ExtUtils::MakeMaker'               => '6',
-      'File::Basename'                    => '2.74',
-      'File::Find'                        => '1.10',
+      'File::Basename'                    => '2.73',
+      'File::Find'                        => '1.07',
       'File::Find::Rule'                  => '0.30',
       'File::Path'                        => '2.07',
+      'File::Trash'                       => '1.06',
       'Getopt::Std::Strict'               => '1.01',
-      'HTTP::Request::Common'             => '1.26',
+      'HTTP::Request::Common'             => '1.28',
       'HTTP::Status'                      => '1.28',
-      'LEOCHARRE::CLI'                    => '1.18',
-      'LEOCHARRE::Class2'                 => '1.16',
+      'LEOCHARRE::CLI'                    => '1.19',
+      'LEOCHARRE::CLI2'                   => '1.07',
+      'LEOCHARRE::Class2'                 => '1.19',
       'LEOCHARRE::DEBUG'                  => '1.12',
-      'LEOCHARRE::Dir'                    => '1.06',
+      'LEOCHARRE::Dir'                    => '1.07',
       'LEOCHARRE::Test'                   => '1.10',
-      'LWP::UserAgent'                    => '2.033',
-      'Module::Info'                      => '0.3',
+      'LWP::UserAgent'                    => '2.036',
+      'Module::Info'                      => '0.31',
       'Net::FTP'                          => '2.75',
       'Smart::Comments'                   => '1',
       'Term::ReadKey'                     => '2.30',
       'Test::Simple'                      => '0',
       'Time::Format'                      => '1.09',
-      'WWW::CPAN'                         => '0.011',
+      'WWW::CPAN'                         => '0',
    },
 
    
@@ -50,6 +55,7 @@ WriteMakefile(
 		bin/pmassertexe
 		bin/pmassertos
 		bin/pmchanges
+		bin/pmclassinspector
 		bin/pmcommit
 		bin/pmdbhmysql
 		bin/pmdistest
@@ -62,6 +68,7 @@ WriteMakefile(
 		bin/pmmanifest
 		bin/pmmanifest.skip
 		bin/pmname
+		bin/pmonoff
 		bin/pmpod
 		bin/pmpodoutline
 		bin/pmreadme

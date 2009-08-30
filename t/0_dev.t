@@ -2,7 +2,7 @@ use Test::Simple 'no_plan';
 use strict;
 use lib './lib';
 use LEOCHARRE::Dev ':all';
-use Smart::Comments '###';
+# use Smart::Comments '###';
 
 `mkdir -p t/Temp-Dist/lib/Temp/Dist
 touch t/Temp-Dist/Makefile.PL

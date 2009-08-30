@@ -2,7 +2,7 @@
 use strict;
 use base 'LEOCHARRE::CLI';
 use WWW::CPAN;
-use Smart::Comments '###';
+# use Smart::Comments '###';
 my $o = gopts('V');
 
 @ARGV or die('missing arg');

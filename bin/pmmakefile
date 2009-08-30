@@ -4,7 +4,7 @@ use lib './lib';
 use base 'LEOCHARRE::CLI';
 use LEOCHARRE::Dev ':all';
 use vars qw/$VERSION/;
-$VERSION = sprintf "%d.%02d", q$Revision: 1.14 $ =~ /(\d+)/g;
+$VERSION = sprintf "%d.%02d", q$Revision: 1.15 $ =~ /(\d+)/g;
 
 
 
@@ -46,14 +46,14 @@ if( my $val = pmdist_guess_version_from($abs_d)  ){
 	$out=~s/VERSION_FROM \=\> ''/VERSION_FROM => '$val'/;
 } else {
    
-   my $_code = q|VERSION => ( sprintf "%d.%02d", q$Revision: 1.14 $ =~ /(\d+)/g )|;
+   my $_code = q|VERSION => ( sprintf "%d.%02d", q$Revision: 1.15 $ =~ /(\d+)/g )|;
 
 
    $out=~s/VERSION_FROM \=\> ''/$_code/;
 }
 
 
-if( my @exe = grep { /^bin\// } ls_pmdist($abs_d) ){
+if( my @exe = grep { /^bin\// } grep { ! /\.[ch]$|\.pod$/ } ls_pmdist($abs_d) ){
 	local $"="\n\t\t" if (scalar @exe > 3);
 	my $q = "[qw(@exe)]";
 

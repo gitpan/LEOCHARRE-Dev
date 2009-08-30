@@ -1,7 +1,6 @@
 Changes
 MANIFEST
 MANIFEST.SKIP
-META.yml
 Makefile.PL
 README
 bin/cpanupload
@@ -12,6 +11,7 @@ bin/pinstall
 bin/pmassertexe
 bin/pmassertos
 bin/pmchanges
+bin/pmclassinspector
 bin/pmcommit
 bin/pmdbhmysql
 bin/pmdistest
@@ -24,6 +24,7 @@ bin/pmmakefile
 bin/pmmanifest
 bin/pmmanifest.skip
 bin/pmname
+bin/pmonoff
 bin/pmpod
 bin/pmpodoutline
 bin/pmreadme
@@ -60,3 +61,5 @@ t/code2.pm
 t/mockdev/bin/notperl
 t/mockdev/bin/yesperl
 t/mockdev/lib/Mock.pm
+t/onofftest.p
+META.yml                                 Module meta-data (added by MakeMaker)

@@ -9,25 +9,26 @@ scalar @ARGV or die('missing modules args');
 my $manymods = (scalar @ARGV > 1) ? 1 : 0;
 
 
-map { do_one($_) } @ARGV;
+for ( @ARGV ){
+   havemod($_) 
+      or warn("# can't find: '$_'\n")
+      and next;
+   do_one($_);
+}
 
 
 
-sub usage {
-   return qq{
-$0 - what version of a perl module is installed
+sub usage {qq{$0 [OPTION].. MODULES
+What version of a perl module is installed
 
-DESCRIPTION
+   -h       help
+   -d       debug
+   -v       version
+   -r       round off things like 2.15, 0.345, and v5.4.4 to 2, 0, and 5
+
 
 If the moduoe version cannot be determined it returns 0,
-if the module is not present, returns undef.
-
-
-OPTION FLAGS
-
-   -r round off things like 2.15, 0.345, and v5.4.4 to 2, 0, and 5
-   -d debug
-   h- help
+if the module is not present, warns.
 
 USAGE EXAMPLES
 
@@ -35,11 +36,8 @@ USAGE EXAMPLES
    $0 Cwd
    $0 ./lib/MOD.pm
 
-SEE ALSO
-
-LEOCHARRE::Dev
-};
-}
+Try man 'LEOCHARRE::Dev' for more info.
+}}
 
 
 
@@ -47,19 +45,10 @@ LEOCHARRE::Dev
 sub do_one {
    my $arg = shift;
 
+
    my $ver;
    no strict 'refs';
 
-   #if ($arg=~/\//){
-   #   if ( -f $arg ){
-   #      if( eval "require '$arg'" ){
-   #         $ver = ${"$modname\:\:VERSION"};
-   #         defined $ver or debug("no version in $arg");
-
-            
-    #     }
-    #  }
-   #}
    
    my $modname = $arg;
 
@@ -101,4 +90,26 @@ sub do_one {
 }
 
 
+sub havemod_ok { # nah, this tests if mod is ok..
+   my $name = shift;
+   $name or croak('missing modname');
+   eval "use $name";
+   $@ ? 0 : 1;
+}
 
+sub havemod {
+   my $name = shift;
+   $name or croak('missing name');
+
+   my $path = $name;
+   $path=~s/::/\//g;
+   $path.='.pm';
+
+      
+   for my $base (@INC){
+      -e "$base/$path" and return 1;
+   }
+   0;
+
+
+}

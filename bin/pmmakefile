@@ -4,7 +4,7 @@ use lib './lib';
 use base 'LEOCHARRE::CLI';
 use LEOCHARRE::Dev ':all';
 use vars qw/$VERSION/;
-$VERSION = sprintf "%d.%02d", q$Revision: 1.15 $ =~ /(\d+)/g;
+$VERSION = sprintf "%d.%02d", q$Revision: 1.16 $ =~ /(\d+)/g;
 
 
 
@@ -25,31 +25,38 @@ if ($o->{d}){
 my $out = join( '', <DATA>);
 
 # analize 
-my $abs_d = is_pmdist( $ARGV[0] ) or die;
+my $abs_d = is_pmdist( $ARGV[0] ) or die('not perl module distro dir');
 
-if( my $val = pmdist_guess_name($abs_d) ){
-	
-	$out=~s/NAME \=\> ''/NAME => '$val'/;
-
+if( my $val = pmdist_guess_name($abs_d) ){	
+	$out=~s/(NAME\s*=>\s*)''/$1'$val'/ or die;
 }
 
 
 # AUTHOR
+$o->{a}||='Leo Charre leocharre at cpan dot org';
 
-my $author = $o->{a} ? "AUTHOR => '$$o{a}'," : '';
-$out=~s/AUTHOR \=\> '',/$author/;
-
+my $author = $o->{a} ? "'$$o{a}'" : '';
+$out=~s/(AUTHOR\s*=>\s*)''/$1$author/ or die;
 
 
 if( my $val = pmdist_guess_version_from($abs_d)  ){
    debug("Asked where to get ver from $abs_d");
-	$out=~s/VERSION_FROM \=\> ''/VERSION_FROM => '$val'/;
-} else {
+	$out=~s/(VERSION_FROM\s*=>\s)*''/$1'$val'/ or die;
    
-   my $_code = q|VERSION => ( sprintf "%d.%02d", q$Revision: 1.15 $ =~ /(\d+)/g )|;
+   my $pod = $val;
+   if ($pod=~s/\.\w{1,2}$/\.pod/){
+      if (-e "$abs_d/$pod" ){
+         $val = $pod;
+      }
+   }
+	$out=~s/(ABSTRACT_FROM\s*=>\s)*''/$1'$val'/ or die;
+} 
 
-
-   $out=~s/VERSION_FROM \=\> ''/$_code/;
+else {
+   
+   #my $_code = q|VERSION => ( sprintf "%d.%02d", q$Revision: 1.16 $ =~ /(\d+)/g )|;
+   #my $_code = q{VERSION_FROM
+   #$out=~s/VERSION_FROM \=\> ''/$_code/;
 }
 
 
@@ -57,7 +64,7 @@ if( my @exe = grep { /^bin\// } grep { ! /\.[ch]$|\.pod$/ } ls_pmdist($abs_d) ){
 	local $"="\n\t\t" if (scalar @exe > 3);
 	my $q = "[qw(@exe)]";
 
-	$out=~s/EXE_FILES \=\> \[\]/EXE_FILES => $q/;
+	$out=~s/(EXE_FILES\s*=>\s*)\[\]/$1$q/ or die;
 }
 
 my $ropt ='';
@@ -65,7 +72,7 @@ if ($o->{r}){ $ropt = ' -r '; }
 
 if ( my $prereq = `pmused $ropt -M '$abs_d'` ){
 
-	$out=~s/   PREREQ_PM \=\> \{\},/$prereq/;
+	$out=~s/PREREQ_PM\s*=>\s*\{\s*\},/$prereq/ or die
 	debug('got pmused');
 }
 
@@ -119,16 +126,20 @@ __DATA__
 use ExtUtils::MakeMaker;
 
 WriteMakefile(
+
    NAME => '',
-   VERSION_FROM => '',
    
-   PREREQ_PM => {},
+   VERSION_FROM   => '',
    
-   LICENSE => 'perl',
+   ABSTRACT_FROM  => '',      
    
-   AUTHOR => '',
+   LICENSE        => 'perl',   
+   
+   AUTHOR         => '',   
    
    EXE_FILES => [],
+
+   PREREQ_PM      => {},
 );
 
 

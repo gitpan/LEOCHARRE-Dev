@@ -1,3 +1,12 @@
+2009-10-30 15:52  cvs
+
+	* bin/pmmakefile: updated pmmakefile to put in abstract from and
+	  author properly, etc
+
+2009-10-12 15:52  cvs
+
+	* bin/pmver: made so pmver says if module is installed or not
+
 2009-08-29 21:20  cvs
 
 	* LEOCHARRE-Dev-1.03.tar.gz, Makefile.PL, README,

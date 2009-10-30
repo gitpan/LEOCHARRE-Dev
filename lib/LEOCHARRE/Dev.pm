@@ -2,10 +2,11 @@ package LEOCHARRE::Dev;
 use strict;
 use Exporter;
 use vars qw($VERSION @ISA @EXPORT_OK %EXPORT_TAGS);
-$VERSION = sprintf "%d.%02d", q$Revision: 1.12 $ =~ /(\d+)/g;
+$VERSION = sprintf "%d.%02d", q$Revision: 1.13 $ =~ /(\d+)/g;
 @EXPORT_OK = qw(is_pmdist ls_pmdist pmdist_guess_name pmdist_guess_version_from);
 @ISA = qw/Exporter/;
 %EXPORT_TAGS = ( 'all' => \@EXPORT_OK );
+
 
 $LEOCHARRE::Dev::DEBUG = 1;
 sub debug { print STDERR " - @_\n" if $LEOCHARRE::Dev::DEBUG; 1 }

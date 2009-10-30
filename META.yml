@@ -1,6 +1,6 @@
 --- #YAML:1.0
 name:               LEOCHARRE-Dev
-version:            1.12
+version:            1.13
 abstract:           tools to help manage distro development and maintenance
 author:
     - Leo Charre leocharre at cpan dot org
@@ -47,7 +47,7 @@ no_index:
     directory:
         - t
         - inc
-generated_by:       ExtUtils::MakeMaker version 6.50
+generated_by:       ExtUtils::MakeMaker version 6.54
 meta-spec:
     url:      http://module-build.sourceforge.net/META-spec-v1.4.html
     version:  1.4
